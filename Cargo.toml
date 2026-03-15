@@ -1,0 +1,48 @@
+[package]
+name = "supplicant-rs"
+version = "0.1.0"
+edition = "2021"
+rust-version = "1.75"
+license = "Apache-2.0"
+description = "Pure Rust WPA supplicant: WPA2/WPA3, EAP, 802.1X. Memory-safe replacement for wpa_supplicant."
+repository = "https://github.com/structured-world/supplicant-rs"
+homepage = "https://github.com/structured-world/supplicant-rs"
+documentation = "https://docs.rs/supplicant-rs"
+keywords = ["wpa", "wifi", "wpa3", "eap", "supplicant"]
+categories = ["network-programming", "cryptography", "os"]
+readme = "README.md"
+
+[dependencies]
+# Crypto
+aes = "0.8"
+hmac = "0.12"
+sha2 = "0.10"
+ring = "0.17"
+
+# Netlink (nl80211)
+neli = "0.6"
+neli-wifi = "0.6"
+
+# Async runtime
+tokio = { version = "1", features = ["net", "io-util", "time", "signal"] }
+
+# Error handling
+thiserror = "2"
+
+# Logging
+tracing = "0.1"
+
+[dev-dependencies]
+tokio = { version = "1", features = ["full"] }
+
+[features]
+default = ["wpa2", "wpa3"]
+wpa2 = []              # WPA2-Personal + WPA2-Enterprise
+wpa3 = []              # WPA3-SAE + WPA3-Enterprise
+eap-tls = ["dep:rustls"]  # EAP-TLS with rustls
+dpp = []               # Device Provisioning Protocol
+pmf = []               # Protected Management Frames
+
+[dependencies.rustls]
+version = "0.23"
+optional = true
