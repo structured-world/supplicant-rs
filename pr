@@ -1,0 +1,52 @@
+
+---
+Промпт 1 — Source Tree Inventory
+
+Мне нужно проанализировать кодовые базы-доноры для проекта supplicant-rs (Pure Rust WPA Supplicant).
+
+### Агент 1: hostap (~/projects/sw/supplicant-rs/donors/hostap/)
+
+ПРАВИЛА ФИЛЬТРАЦИИ:
+- ВКЛЮЧАТЬ: wpa_supplicant/ (main daemon), src/common/ (shared protocol code),
+  src/crypto/ (crypto backends), src/eap_peer/ (EAP client methods),
+  src/rsn_supp/ (WPA/RSN supplicant), src/drivers/ (nl80211 interface)
+- ИСКЛЮЧАТЬ: hostapd/ (AP mode — separate project scope), tests/, wlantest/,
+  src/eap_server/ (server side), src/radius/ (server side), hs20/
+- ИСКЛЮЧАТЬ: файлы < 20 строк
+
+Focus: wpa_supplicant/wpa_supplicant.c (main loop), src/rsn_supp/wpa.c (4-way handshake),
+src/common/sae.c (WPA3 SAE/dragonfly), src/eap_peer/eap_tls.c (EAP-TLS),
+src/drivers/driver_nl80211.c (kernel interface), src/common/wpa_common.c (shared crypto)
+
+---
+
+Промпт 2 — Feature-Targeted Deep Analysis
+
+FEATURE-БЛОКИ (10 штук):
+
+1. nl80211 Interface — driver_nl80211.c, netlink socket, commands, events
+2. WPA2 4-Way Handshake — rsn_supp/wpa.c, EAPOL-Key message processing, PTK/GTK derivation
+3. WPA3 SAE — common/sae.c, dragonfly key exchange, anti-clogging, commit/confirm
+4. EAPOL State Machine — eapol_supp/eapol_supp_sm.c, IEEE 802.1X states
+5. EAP Framework — eap_peer/eap.c, method selection, identity handling
+6. EAP-TLS — eap_peer/eap_tls.c, TLS handshake within EAP
+7. EAP-TTLS/PEAP — eap_peer/eap_ttls.c, eap_peer/eap_peap.c, tunneled methods
+8. PMKSA Caching — rsn_supp/pmksa_cache.c, PMK lifetime, PMKID matching
+9. Config & Control Interface — wpa_supplicant/config.c, ctrl_iface.c, D-Bus
+10. OWE/DPP — common/dpp.c, DPP bootstrapping and authentication
+
+---
+
+Промпт 3 — Architecture Documents
+
+arch/nl80211.md, arch/wpa2.md, arch/wpa3-sae.md, arch/eap.md, arch/eapol.md, arch/ROADMAP.md
+
+---
+
+Промпт 4 — Roadmap
+
+Phase 1 (4 мес): nl80211 + WPA2 4-way handshake → connects to WPA2-Personal network
+Phase 2 (4 мес): WPA3-SAE + EAPOL state machine → WPA3 support
+Phase 3 (4 мес): EAP-TLS/TTLS/PEAP → enterprise WPA2/3-Enterprise
+Phase 4 (4 мес): OWE/DPP/FT/FILS + config/D-Bus → feature parity with wpa_supplicant core
+Phase 5 (6 мес): Driver quirks, regression testing against real hardware, production hardening
