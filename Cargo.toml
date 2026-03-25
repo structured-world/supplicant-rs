@@ -20,7 +20,7 @@ sha2 = "0.10"
 ring = "0.17"
 
 # Netlink (nl80211)
-neli = "0.6"
+neli = "0.7"
 neli-wifi = "0.6"
 
 # Async runtime
