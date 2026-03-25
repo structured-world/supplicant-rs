@@ -2,7 +2,7 @@
 name = "supplicant-rs"
 version = "0.1.0"
 edition = "2021"
-rust-version = "1.75"
+rust-version = "1.92"
 license = "Apache-2.0"
 description = "Pure Rust WPA supplicant: WPA2/WPA3, EAP, 802.1X. Memory-safe replacement for wpa_supplicant."
 repository = "https://github.com/structured-world/supplicant-rs"
